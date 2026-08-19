@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NexusFactory Studio</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div><strong>NexusFactory Studio</strong><span class="muted"> registry-driven host</span></div>
+    <div class="registry-loader"><input id="registry-url" aria-label="Registry URL" /><button id="load-registry">Load Registry</button></div>
+  </header>
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="panel-title">Domains & Kits</div>
+      <div id="registry-status" class="status">No registry loaded</div>
+      <div id="catalog"></div>
+    </aside>
+    <section class="workspace">
+      <div id="viewport" class="viewport"><div class="empty-state">Select a registered kit</div></div>
+      <div id="artifact-bar" class="artifact-bar"></div>
+    </section>
+    <aside class="inspector">
+      <div class="panel-title">Inspector</div>
+      <div id="kit-meta" class="kit-meta muted">No kit selected.</div>
+      <div id="controls"></div>
+      <div id="actions" class="actions"></div>
+      <pre id="diagnostics" class="diagnostics">Ready.</pre>
+    </aside>
+  </main>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

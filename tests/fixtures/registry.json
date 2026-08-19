@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "nexusfactory.registry/1",
+  "revision": 1,
+  "domains": [
+    { "id":"factory-domain","domainPath":"n:factory","parentDomainPath":null,"provides":["factory:core"],"requires":[] },
+    { "id":"mock-domain","domainPath":"n:factory:mock","parentDomainPath":"n:factory","provides":["factory:mock"],"requires":["factory:core"] }
+  ],
+  "kits": [
+    {
+      "id":"mock-kit","displayName":"Mock Kit","version":"0.1.0","domainPath":"n:factory:mock",
+      "requires":["factory:mock"],"provides":["artifact:mesh","seed:deterministic","editor:parameters","export:glb"],
+      "services":["describe","generate","reroll","validate","export"],
+      "parameterSchema":[{"id":"size","label":"Size","type":"number","minimum":1,"maximum":3,"default":2,"step":1}],
+      "editor":{"preview":"mesh-3d","inspector":"schema","surfaces":["seed","parameters","export"]},
+      "source":{"module":"mock-kit.mjs","exportName":"kit"}
+    }
+  ],
+  "capabilityGraph": { "valid":true,"missing":[],"providers":{},"edges":{} },
+  "integrity":"sha256:test"
+}
