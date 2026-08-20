@@ -2,6 +2,7 @@ import { RegistryHost } from "./registry-host.js";
 import { RuntimeHost } from "./runtime-host.js";
 import { deriveEditorModel } from "./editor-contract.js";
 import { buildCatalog, listCategories, categoryForKit } from "./catalog-model.js";
+import { choiceOptions, isChoiceParameter, randomControlValue } from "./control-value.js";
 import { Mesh3DViewer } from "./viewers/mesh-3d.js";
 
 const DEFAULT_REGISTRY = "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@main/registry.json";
@@ -33,7 +34,7 @@ function uniqueExisting(ids) { const existing = new Set(registry.listKits().map(
 
 function touchRecent(id) { recent = [id, ...recent.filter((entry) => entry !== id)].slice(0, 12); saveList(STORAGE.recent, recent); }
 function toggleFavorite() { if (!currentManifest) return; const id = currentManifest.id; favorites = favorites.includes(id) ? favorites.filter((entry) => entry !== id) : [id, ...favorites]; saveList(STORAGE.favorites, favorites); updateFavorite(); renderNavigation(); renderCatalog(); }
-function updateFavorite() { if (!currentManifest) { elements.favorite.hidden = true; return; } elements.favorite.hidden = false; const active = favorites.includes(currentManifest.id); elements.favorite.textContent = active ? "★" : "☆"; elements.favorite.title = active ? "Remove favorite" : "Add favorite"; }
+function updateFavorite() { if (!currentManifest) { elements.favorite.hidden = true; return; } const active = favorites.includes(currentManifest.id); elements.favorite.hidden = false; elements.favorite.textContent = active ? "★" : "☆"; elements.favorite.title = active ? "Remove favorite" : "Add favorite"; }
 
 function navButton(label, category, count) {
   const node = document.createElement("button"); node.className = `nav-button${selectedCategory === category ? " active" : ""}`; node.dataset.category = category;
@@ -72,13 +73,23 @@ function renderCatalog() {
 function collectParams() { return Object.fromEntries([...controls.entries()].filter(([id]) => id !== "seed").map(([id, input]) => [id, input.type === "range" ? Number(input.value) : input.value])); }
 function currentSeed() { return String(controls.get("seed")?.value ?? `${currentManifest?.id ?? "factory"}:001`); }
 function randomUnit() { if (globalThis.crypto?.getRandomValues) { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] / 0xffffffff; } return Math.random(); }
-function randomValue(param) { const min = Number(param.minimum ?? 0); const max = Number(param.maximum ?? 1); const raw = min + (max - min) * randomUnit(); const step = Number(param.step ?? (param.type === "integer" ? 1 : 0.01)); const stepped = Math.round((raw - min) / step) * step + min; return param.type === "integer" ? Math.round(stepped) : Number(stepped.toFixed(6)); }
+function randomValue(param) { return randomControlValue(param, randomUnit); }
 
 function makeField(param, container) {
   const field = document.createElement("div"); field.className = "field";
-  const label = document.createElement("label"); const name = document.createElement("span"); name.textContent = param.label ?? param.id; const value = document.createElement("span"); value.textContent = String(param.default); label.append(name, value);
-  const input = document.createElement("input"); input.type = "range"; input.min = param.minimum; input.max = param.maximum; input.step = param.step ?? (param.type === "integer" ? 1 : 0.01); input.value = param.default;
-  input.addEventListener("input", () => { value.textContent = input.value; scheduleGenerate(); }); field.append(label, input); container.appendChild(field); controls.set(param.id, input);
+  const label = document.createElement("label"); const name = document.createElement("span"); name.textContent = param.label ?? param.id; const value = document.createElement("span"); label.append(name, value);
+  let input;
+  if (isChoiceParameter(param)) {
+    input = document.createElement("select");
+    for (const option of choiceOptions(param)) { const node = document.createElement("option"); node.value = option.value; node.textContent = option.label; input.appendChild(node); }
+    input.value = String(param.default ?? input.options[0]?.value ?? "");
+    const update = () => { value.textContent = input.selectedOptions[0]?.textContent ?? input.value; scheduleGenerate(); };
+    input.addEventListener("change", update); value.textContent = input.selectedOptions[0]?.textContent ?? input.value;
+  } else {
+    input = document.createElement("input"); input.type = "range"; input.min = param.minimum; input.max = param.maximum; input.step = param.step ?? (param.type === "integer" ? 1 : 0.01); input.value = param.default;
+    input.addEventListener("input", () => { value.textContent = input.value; scheduleGenerate(); }); value.textContent = String(param.default);
+  }
+  field.append(label, input); container.appendChild(field); controls.set(param.id, input);
 }
 
 function renderInspector(manifest) {
@@ -124,7 +135,7 @@ async function randomizeCurrent() {
   if (!currentManifest || !currentModel) return;
   const group = currentModel.randomizationGroups.find((entry) => entry.id === elements["randomize-group"].value) ?? currentModel.randomizationGroups[0];
   const schema = new Map(currentModel.parameters.map((param) => [param.id, param]));
-  for (const id of group.parameters ?? []) { const input = controls.get(id); const param = schema.get(id); if (!input || !param) continue; const next = randomValue(param); input.value = String(next); input.dispatchEvent(new Event("input")); }
+  for (const id of group.parameters ?? []) { const input = controls.get(id); const param = schema.get(id); if (!input || !param) continue; const next = randomValue(param); input.value = String(next); input.dispatchEvent(new Event(isChoiceParameter(param) ? "change" : "input")); }
   clearTimeout(generateTimer);
   if (group.rerollSeed && controls.has("seed")) {
     const result = await runtime.reroll(currentManifest.id, { seed: currentSeed(), params: collectParams() }); controls.get("seed").value = result.seed; await showArtifact(result.artifact); const validation = await runtime.validate(currentManifest.id, result.artifact); if (!validation.valid) throw new Error("Randomized artifact failed validation."); diagnostics({ randomized: group.id, valid: true, seed: result.seed });
