@@ -11,6 +11,13 @@ test("editor model separates primary and advanced controls", () => {
   assert.equal(model.randomizationGroups[0].id, "shape");
 });
 
+test("editor model infers a clean fallback for older manifests", () => {
+  const model = deriveEditorModel({ id:"legacy", displayName:"Legacy", parameterSchema:[{id:"scale"},{id:"detailCount"},{id:"wear"}], provides:["seed:deterministic"], editor:{surfaces:["seed"]} });
+  assert.deepEqual(model.primaryParameters.map((x)=>x.id), ["scale","wear"]);
+  assert.deepEqual(model.advancedParameters.map((x)=>x.id), ["detailCount"]);
+  assert.ok(model.randomizationGroups.some((group)=>group.id==="materials" && group.parameters.includes("wear")));
+});
+
 test("catalog uses human categories and search", () => {
   const kits=[{id:"b",displayName:"Windup Ballista",domainPath:"n:factory:object:weapon"},{id:"t",displayName:"Broadleaf Tree",domainPath:"n:factory:object:foliage"}];
   assert.equal(categoryForKit(kits[0]), "Weapons");
