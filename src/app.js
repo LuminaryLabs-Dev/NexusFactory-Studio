@@ -104,7 +104,7 @@ async function selectKit(id) {
 }
 
 async function ensureViewer() { if (!viewer) { elements.viewport.replaceChildren(); viewer = new Mesh3DViewer(elements.viewport); } return viewer; }
-async function showArtifact(artifact) { currentArtifact = artifact; if (currentModel.preview === "mesh-3d") (await ensureViewer()).show(artifact); setStatus(`${artifact.statistics.meshCount} meshes · ${artifact.statistics.triangleCount} triangles`); }
+async function showArtifact(artifact) { currentArtifact = artifact; if (currentModel.preview === "mesh-3d") (await ensureViewer()).show(artifact); setStatus("Ready."); }
 
 async function generate() {
   if (!currentManifest) return;
@@ -125,6 +125,7 @@ async function randomizeCurrent() {
   const group = currentModel.randomizationGroups.find((entry) => entry.id === elements["randomize-group"].value) ?? currentModel.randomizationGroups[0];
   const schema = new Map(currentModel.parameters.map((param) => [param.id, param]));
   for (const id of group.parameters ?? []) { const input = controls.get(id); const param = schema.get(id); if (!input || !param) continue; const next = randomValue(param); input.value = String(next); input.dispatchEvent(new Event("input")); }
+  clearTimeout(generateTimer);
   if (group.rerollSeed && controls.has("seed")) {
     const result = await runtime.reroll(currentManifest.id, { seed: currentSeed(), params: collectParams() }); controls.get("seed").value = result.seed; await showArtifact(result.artifact); const validation = await runtime.validate(currentManifest.id, result.artifact); if (!validation.valid) throw new Error("Randomized artifact failed validation."); diagnostics({ randomized: group.id, valid: true, seed: result.seed });
   } else await generate();
