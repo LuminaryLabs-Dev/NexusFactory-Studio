@@ -1,6 +1,7 @@
 const REGISTRY_SCHEMA = "nexusfactory.registry/1";
 
 function clone(value) { return structuredClone(value); }
+function defaultNonce() { return globalThis.crypto?.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`; }
 
 function assertSnapshot(snapshot) {
   if (!snapshot || snapshot.schemaVersion !== REGISTRY_SCHEMA) throw new TypeError(`Unsupported registry schema: ${snapshot?.schemaVersion ?? "missing"}`);
@@ -15,12 +16,14 @@ function assertSnapshot(snapshot) {
 }
 
 export class RegistryHost {
-  constructor({ fetcher = globalThis.fetch?.bind(globalThis), importer = (url) => import(url) } = {}) {
+  constructor({ fetcher = globalThis.fetch?.bind(globalThis), importer = (url) => import(url), nonceFactory = defaultNonce } = {}) {
     this.fetcher = fetcher;
     this.importer = importer;
+    this.nonceFactory = nonceFactory;
     this.registryUrl = null;
     this.snapshotValue = null;
     this.moduleCache = new Map();
+    this.moduleNonce = this.nonceFactory();
   }
 
   async load(registryUrl) {
@@ -33,6 +36,7 @@ export class RegistryHost {
   loadSnapshot(snapshot, registryUrl = "file:///registry.json") {
     this.snapshotValue = clone(assertSnapshot(snapshot));
     this.registryUrl = String(registryUrl);
+    this.moduleNonce = this.nonceFactory();
     this.moduleCache.clear();
     return this.snapshot();
   }
@@ -72,6 +76,7 @@ export class RegistryHost {
     if (!modulePath) throw new TypeError(`Kit ${manifest?.id ?? "unknown"} does not declare source.module.`);
     const url = new URL(modulePath, this.registryUrl);
     if (manifest.contentFingerprint) url.searchParams.set("v", manifest.contentFingerprint);
+    url.searchParams.set("load", this.moduleNonce);
     return url.href;
   }
 
