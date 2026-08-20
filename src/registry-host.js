@@ -70,7 +70,9 @@ export class RegistryHost {
   resolveModuleUrl(manifest) {
     const modulePath = manifest?.source?.module;
     if (!modulePath) throw new TypeError(`Kit ${manifest?.id ?? "unknown"} does not declare source.module.`);
-    return new URL(modulePath, this.registryUrl).href;
+    const url = new URL(modulePath, this.registryUrl);
+    if (manifest.contentFingerprint) url.searchParams.set("v", manifest.contentFingerprint);
+    return url.href;
   }
 
   async loadKit(id) {
