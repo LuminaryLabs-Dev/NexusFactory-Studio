@@ -8,25 +8,36 @@
 </head>
 <body>
   <header class="topbar">
-    <div><strong>NexusFactory Studio</strong><span class="muted"> registry-driven host</span></div>
-    <div class="registry-loader"><input id="registry-url" aria-label="Registry URL" /><button id="load-registry">Load Registry</button></div>
+    <div class="brand"><strong>NexusFactory</strong><span>Studio</span></div>
+    <label class="global-search"><span>⌕</span><input id="search" placeholder="Search generators…" autocomplete="off" /><kbd>⌘K</kbd></label>
+    <button id="developer-toggle" class="quiet" aria-pressed="false">Developer</button>
   </header>
   <main class="layout">
     <aside class="sidebar">
-      <div class="panel-title">Domains & Kits</div>
-      <div id="registry-status" class="status">No registry loaded</div>
-      <div id="catalog"></div>
+      <div class="panel-title">Generators</div>
+      <nav id="library-nav" class="library-nav"></nav>
+      <div class="sidebar-divider"></div>
+      <div id="catalog" class="catalog"></div>
     </aside>
     <section class="workspace">
-      <div id="viewport" class="viewport"><div class="empty-state">Select a registered kit</div></div>
-      <div id="artifact-bar" class="artifact-bar"></div>
+      <div id="viewport" class="viewport"><div class="empty-state"><strong>Choose a generator</strong><span>Search or browse the library to start.</span></div></div>
+      <div id="artifact-bar" class="artifact-bar">Ready.</div>
     </section>
     <aside class="inspector">
-      <div class="panel-title">Inspector</div>
-      <div id="kit-meta" class="kit-meta muted">No kit selected.</div>
+      <div class="inspector-head"><div><div class="panel-title">Customize</div><h2 id="kit-title">Select a generator</h2></div><button id="favorite" class="icon-button" hidden title="Favorite">☆</button></div>
       <div id="controls"></div>
-      <div id="actions" class="actions"></div>
-      <pre id="diagnostics" class="diagnostics">Ready.</pre>
+      <details id="advanced" class="advanced" hidden><summary>Advanced</summary><div id="advanced-controls"></div></details>
+      <div id="actions" class="actions" hidden>
+        <div class="randomize-row"><button id="randomize" class="primary">Randomize</button><select id="randomize-group" aria-label="Randomize group"></select></div>
+        <button id="export">Export</button>
+      </div>
+      <section id="developer-panel" class="developer-panel" hidden>
+        <div class="panel-title">Developer</div>
+        <label class="dev-field">Registry URL<input id="registry-url" /></label>
+        <button id="load-registry">Reload Registry</button>
+        <pre id="kit-meta"></pre>
+        <pre id="diagnostics">Ready.</pre>
+      </section>
     </aside>
   </main>
   <script type="module" src="./src/app.js"></script>
