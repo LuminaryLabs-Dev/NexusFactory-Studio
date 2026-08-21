@@ -8,7 +8,7 @@ import { mimeTypeForFormat } from "./viewer-contract.js";
 import { Mesh3DViewer } from "./viewers/mesh-3d.js";
 import { Image2DViewer } from "./viewers/image-2d.js";
 
-const DEFAULT_REGISTRY = "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@main/registry.json";
+const DEFAULT_REGISTRY = "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@e4d8ee60e5afbac03657330ab10dccfacaef7ee8/registry.json";
 const STORAGE = { recent: "nexusfactory.recent", favorites: "nexusfactory.favorites" };
 const registry = new RegistryHost();
 const runtime = new RuntimeHost(registry);

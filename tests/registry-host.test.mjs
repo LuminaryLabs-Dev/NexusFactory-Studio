@@ -21,6 +21,31 @@ test("Studio host loads a registry without generator-specific knowledge", async 
   assert.equal(await runtime.exportArtifact("mock-kit", generated, "glb"), "glb");
 });
 
+test("registry fetches are cache-busted without changing the module base URL", async () => {
+  let request = null;
+  const sourceUrl = "https://cdn.jsdelivr.net/gh/example/kits@main/registry.json?channel=dev";
+  const host = new RegistryHost({
+    fetcher: async (url, options) => {
+      request = { url, options };
+      return { ok: true, json: async () => snapshot };
+    },
+    nonceFactory: () => "fresh-registry"
+  });
+
+  await host.load(sourceUrl);
+
+  const requested = new URL(request.url);
+  assert.equal(requested.searchParams.get("channel"), "dev");
+  assert.equal(requested.searchParams.get("load"), "fresh-registry");
+  assert.equal(request.options.cache, "no-store");
+  assert.equal(host.registryUrl, sourceUrl);
+
+  const moduleUrl = new URL(host.resolveModuleUrl(snapshot.kits[0]));
+  assert.equal(moduleUrl.pathname, "/gh/example/kits@main/mock-kit.mjs");
+  assert.equal(moduleUrl.searchParams.get("channel"), null);
+  assert.equal(moduleUrl.searchParams.get("load"), "fresh-registry");
+});
+
 test("editor surfaces are derived from kit capabilities", () => {
   const model = deriveEditorModel(snapshot.kits[0]);
   assert.equal(model.preview, "mesh-3d");

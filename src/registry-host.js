@@ -2,6 +2,20 @@ const REGISTRY_SCHEMA = "nexusfactory.registry/1";
 
 function clone(value) { return structuredClone(value); }
 function defaultNonce() { return globalThis.crypto?.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`; }
+function cacheBustedUrl(value, nonce) {
+  const source = String(value);
+  try {
+    const url = new URL(source);
+    url.searchParams.set("load", String(nonce));
+    return url.href;
+  } catch {
+    const hashIndex = source.indexOf("#");
+    const base = hashIndex >= 0 ? source.slice(0, hashIndex) : source;
+    const hash = hashIndex >= 0 ? source.slice(hashIndex) : "";
+    const separator = base.includes("?") ? "&" : "?";
+    return `${base}${separator}load=${encodeURIComponent(String(nonce))}${hash}`;
+  }
+}
 
 function assertSnapshot(snapshot) {
   if (!snapshot || snapshot.schemaVersion !== REGISTRY_SCHEMA) throw new TypeError(`Unsupported registry schema: ${snapshot?.schemaVersion ?? "missing"}`);
@@ -28,9 +42,11 @@ export class RegistryHost {
 
   async load(registryUrl) {
     if (!this.fetcher) throw new TypeError("RegistryHost requires fetch support.");
-    const response = await this.fetcher(registryUrl, { cache: "no-store" });
-    if (!response.ok) throw new Error(`Registry request failed (${response.status}) for ${registryUrl}`);
-    return this.loadSnapshot(await response.json(), registryUrl);
+    const sourceUrl = String(registryUrl);
+    const requestUrl = cacheBustedUrl(sourceUrl, this.nonceFactory());
+    const response = await this.fetcher(requestUrl, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Registry request failed (${response.status}) for ${sourceUrl}`);
+    return this.loadSnapshot(await response.json(), sourceUrl);
   }
 
   loadSnapshot(snapshot, registryUrl = "file:///registry.json") {
