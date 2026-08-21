@@ -88,10 +88,10 @@ Kit export services return `nexusfactory.export-result/1`, including the format,
 
 ## Default registry
 
-The browser is pinned to the validated Kits revision containing the phased Tree runtime and standardized Ballista/Coral adapters:
+The browser is pinned to the tested Kits revision containing the typed phased Tree runtime and standardized Ballista/Coral adapters:
 
 ```text
-https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@7ed8cddb90782c45361f969745b87c7ed62dbdca/registry.json
+https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@338129e1ab86aad7b7da054a3888fe2c3ead493a/registry.json
 ```
 
 The pin keeps the registry snapshot and relative kit modules on one immutable revision. Developer mode can load another compatible registry URL when required.
