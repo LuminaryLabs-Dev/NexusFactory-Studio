@@ -8,7 +8,7 @@ export class Mesh3DViewer {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0b1018);
     this.camera = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
     this.renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio ?? 1, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.shadowMap.enabled = true;
@@ -73,10 +73,12 @@ export class Mesh3DViewer {
     this.clear();
     const palette = artifact.materials ?? {};
     for (const source of artifact.meshes ?? []) {
+      if (!Array.isArray(source.positions) || !Array.isArray(source.indices)) throw new TypeError(`Mesh ${source.id ?? "unknown"} requires positions and indices.`);
+      if (!Array.isArray(source.normals) || source.normals.length !== source.positions.length) throw new TypeError(`Mesh ${source.id ?? "unknown"} requires Kit-provided normals.`);
       const geometry = new THREE.BufferGeometry();
       geometry.setAttribute("position", new THREE.Float32BufferAttribute(source.positions, 3));
+      geometry.setAttribute("normal", new THREE.Float32BufferAttribute(source.normals, 3));
       geometry.setIndex(source.indices);
-      geometry.computeVertexNormals();
       const materialSource = palette[source.material] ?? {};
       const color = materialSource.baseColor ?? [0.65, 0.68, 0.72, 1];
       const material = new THREE.MeshStandardMaterial({
@@ -96,6 +98,12 @@ export class Mesh3DViewer {
       const sphere = box.getBoundingSphere(new THREE.Sphere());
       this.distance = Math.max(2.5, sphere.radius * 2.7);
     }
+  }
+
+  snapshot(type = "image/png") {
+    if (this.disposed) return Promise.reject(new Error("Cannot snapshot a disposed Mesh3DViewer."));
+    this.renderer.render(this.scene, this.camera);
+    return new Promise((resolve, reject) => this.renderer.domElement.toBlob((blob) => blob ? resolve(blob) : reject(new Error("3D snapshot failed.")), type));
   }
 
   animate() {
