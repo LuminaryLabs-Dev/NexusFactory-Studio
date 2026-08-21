@@ -3,6 +3,8 @@ import * as THREE from "https://esm.sh/three@0.165.0";
 export class Mesh3DViewer {
   constructor(container) {
     this.container = container;
+    this.disposed = false;
+    this.frame = null;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0b1018);
     this.camera = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
@@ -24,6 +26,7 @@ export class Mesh3DViewer {
     this.distance = 8;
     this.target = new THREE.Vector3(0, 1, 0);
     this.drag = null;
+    this.handlers = {};
     this.bindInput();
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(container);
@@ -33,17 +36,23 @@ export class Mesh3DViewer {
 
   bindInput() {
     const canvas = this.renderer.domElement;
-    canvas.addEventListener("pointerdown", (event) => { this.drag = { x: event.clientX, y: event.clientY, azimuth: this.azimuth, elevation: this.elevation }; canvas.setPointerCapture(event.pointerId); });
-    canvas.addEventListener("pointermove", (event) => {
+    this.handlers.pointerdown = (event) => { this.drag = { x: event.clientX, y: event.clientY, azimuth: this.azimuth, elevation: this.elevation }; canvas.setPointerCapture(event.pointerId); };
+    this.handlers.pointermove = (event) => {
       if (!this.drag) return;
       this.azimuth = this.drag.azimuth - (event.clientX - this.drag.x) * 0.008;
       this.elevation = Math.max(-1.25, Math.min(1.25, this.drag.elevation + (event.clientY - this.drag.y) * 0.008));
-    });
-    canvas.addEventListener("pointerup", () => { this.drag = null; });
-    canvas.addEventListener("wheel", (event) => { event.preventDefault(); this.distance = Math.max(1.5, Math.min(40, this.distance * Math.exp(event.deltaY * 0.001))); }, { passive: false });
+    };
+    this.handlers.pointerup = () => { this.drag = null; };
+    this.handlers.wheel = (event) => { event.preventDefault(); this.distance = Math.max(1.5, Math.min(40, this.distance * Math.exp(event.deltaY * 0.001))); };
+    canvas.addEventListener("pointerdown", this.handlers.pointerdown);
+    canvas.addEventListener("pointermove", this.handlers.pointermove);
+    canvas.addEventListener("pointerup", this.handlers.pointerup);
+    canvas.addEventListener("pointercancel", this.handlers.pointerup);
+    canvas.addEventListener("wheel", this.handlers.wheel, { passive: false });
   }
 
   resize() {
+    if (this.disposed) return;
     const width = Math.max(1, this.container.clientWidth);
     const height = Math.max(1, this.container.clientHeight);
     this.renderer.setSize(width, height, false);
@@ -60,6 +69,7 @@ export class Mesh3DViewer {
   }
 
   show(artifact) {
+    if (this.disposed) throw new Error("Cannot show an artifact on a disposed Mesh3DViewer.");
     this.clear();
     const palette = artifact.materials ?? {};
     for (const source of artifact.meshes ?? []) {
@@ -89,7 +99,8 @@ export class Mesh3DViewer {
   }
 
   animate() {
-    requestAnimationFrame(() => this.animate());
+    if (this.disposed) return;
+    this.frame = requestAnimationFrame(() => this.animate());
     const cos = Math.cos(this.elevation);
     this.camera.position.set(
       this.target.x + Math.sin(this.azimuth) * cos * this.distance,
@@ -98,5 +109,22 @@ export class Mesh3DViewer {
     );
     this.camera.lookAt(this.target);
     this.renderer.render(this.scene, this.camera);
+  }
+
+  dispose() {
+    if (this.disposed) return;
+    this.disposed = true;
+    if (this.frame !== null) cancelAnimationFrame(this.frame);
+    this.resizeObserver?.disconnect();
+    const canvas = this.renderer.domElement;
+    canvas.removeEventListener("pointerdown", this.handlers.pointerdown);
+    canvas.removeEventListener("pointermove", this.handlers.pointermove);
+    canvas.removeEventListener("pointerup", this.handlers.pointerup);
+    canvas.removeEventListener("pointercancel", this.handlers.pointerup);
+    canvas.removeEventListener("wheel", this.handlers.wheel);
+    this.clear();
+    this.renderer.dispose();
+    this.renderer.forceContextLoss?.();
+    canvas.remove();
   }
 }

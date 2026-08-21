@@ -24,3 +24,42 @@ test("catalog uses human categories and search", () => {
   assert.equal(categoryForKit(kits[1]), "Nature");
   assert.deepEqual(buildCatalog(kits,"ball").map((x)=>x.id), ["b"]);
 });
+
+test("Coral image manifest derives entirely generic Studio surfaces", () => {
+  const manifest = {
+    id:"factory-texture-coral", displayName:"Coral Generator", domainPath:"n:factory:texture",
+    provides:["artifact:image","seed:deterministic","editor:parameters","export:png"],
+    parameterSchema:[
+      {id:"mode",type:"select",options:["asset","reef"],default:"asset"},
+      {id:"species",type:"select",options:["staghorn","elkhorn","brain","pillar","lettuce","sea-fan","sea-rod","mixed"],default:"staghorn"},
+      {id:"palette",type:"select",options:["pink","orange"],default:"pink"},
+      {id:"size",type:"number",minimum:0,maximum:1,default:.55},
+      {id:"density",type:"number",minimum:0,maximum:1,default:.58},
+      {id:"asymmetry",type:"number",minimum:0,maximum:1,default:.28},
+      {id:"highlight",type:"number",minimum:0,maximum:1,default:.55},
+      {id:"reefComplexity",type:"number",minimum:0,maximum:1,default:.62},
+      {id:"fishDensity",type:"number",minimum:0,maximum:1,default:.48},
+      {id:"waterStyle",type:"select",options:["tropical"],default:"tropical"}
+    ],
+    editor:{
+      title:"Coral Generator",category:"Textures",preview:"image-2d",surfaces:["seed","parameters","export","diagnostics"],
+      primary:["mode","species","palette","size","density","asymmetry"],
+      advanced:["highlight","reefComplexity","fishDensity","waterStyle","seed"],internal:[],
+      randomizationGroups:[
+        {id:"everything",label:"Everything",parameters:["mode","species","palette","size","density","asymmetry","highlight","reefComplexity","fishDensity","waterStyle"],rerollSeed:true},
+        {id:"form",label:"Form",parameters:["species","size","density","asymmetry"],rerollSeed:false},
+        {id:"color",label:"Color",parameters:["palette","highlight","waterStyle"],rerollSeed:false},
+        {id:"scene",label:"Scene",parameters:["reefComplexity","fishDensity"],rerollSeed:false}
+      ]
+    }
+  };
+  const model=deriveEditorModel(manifest);
+  assert.equal(model.title,"Coral Generator");
+  assert.equal(model.category,"Textures");
+  assert.equal(model.preview,"image-2d");
+  assert.deepEqual(model.primaryParameters.map((x)=>x.id),["mode","species","palette","size","density","asymmetry"]);
+  assert.deepEqual(model.advancedParameters.map((x)=>x.id),["highlight","reefComplexity","fishDensity","waterStyle"]);
+  assert.equal(model.showSeed,true);
+  assert.deepEqual(model.exportFormats,["png"]);
+  assert.deepEqual(model.randomizationGroups.map((x)=>x.id),["everything","form","color","scene"]);
+});

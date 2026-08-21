@@ -3,7 +3,10 @@ import { RuntimeHost } from "./runtime-host.js";
 import { deriveEditorModel } from "./editor-contract.js";
 import { buildCatalog, listCategories, categoryForKit } from "./catalog-model.js";
 import { choiceOptions, isChoiceParameter, randomControlValue } from "./control-value.js";
+import { ViewerHost } from "./viewer-host.js";
+import { mimeTypeForFormat } from "./viewer-contract.js";
 import { Mesh3DViewer } from "./viewers/mesh-3d.js";
+import { Image2DViewer } from "./viewers/image-2d.js";
 
 const DEFAULT_REGISTRY = "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@main/registry.json";
 const STORAGE = { recent: "nexusfactory.recent", favorites: "nexusfactory.favorites" };
@@ -11,8 +14,11 @@ const registry = new RegistryHost();
 const runtime = new RuntimeHost(registry);
 const $ = (id) => document.getElementById(id);
 const elements = Object.fromEntries(["search","developer-toggle","library-nav","catalog","viewport","artifact-bar","kit-title","favorite","controls","advanced","advanced-controls","actions","randomize","randomize-group","export","developer-panel","registry-url","load-registry","kit-meta","diagnostics"].map((id) => [id, $(id)]));
+const viewerHost = new ViewerHost(elements.viewport, {
+  "mesh-3d": (container) => new Mesh3DViewer(container),
+  "image-2d": (container) => new Image2DViewer(container)
+});
 
-let viewer = null;
 let currentManifest = null;
 let currentModel = null;
 let currentArtifact = null;
@@ -114,8 +120,24 @@ async function selectKit(id) {
   } catch (error) { setStatus(error.message, true); diagnostics({ error: error.message, stack: error.stack }); }
 }
 
-async function ensureViewer() { if (!viewer) { elements.viewport.replaceChildren(); viewer = new Mesh3DViewer(elements.viewport); } return viewer; }
-async function showArtifact(artifact) { currentArtifact = artifact; if (currentModel.preview === "mesh-3d") (await ensureViewer()).show(artifact); setStatus("Ready."); }
+function unsupportedPreview(preview) {
+  const empty = document.createElement("div");
+  empty.className = "empty-state";
+  const title = document.createElement("strong"); title.textContent = "Preview unavailable";
+  const detail = document.createElement("span"); detail.textContent = `Preview type "${preview ?? "none"}" is not supported by this Studio build.`;
+  empty.append(title, detail); elements.viewport.replaceChildren(empty);
+}
+
+async function showArtifact(artifact) {
+  currentArtifact = artifact;
+  const result = viewerHost.show(currentModel.preview, artifact);
+  if (!result.supported) {
+    unsupportedPreview(result.type);
+    setStatus(`Preview type "${result.type}" is unsupported.`, true);
+    return;
+  }
+  setStatus("Ready.");
+}
 
 async function generate() {
   if (!currentManifest) return;
@@ -146,11 +168,12 @@ async function exportCurrent() {
   if (!currentArtifact) await generate(); if (!currentArtifact) return;
   const validation = await runtime.validate(currentManifest.id, currentArtifact); if (!validation.valid) throw new Error("Cannot export an invalid artifact.");
   const format = currentModel.exportFormats[0] ?? "glb"; const output = await runtime.exportArtifact(currentManifest.id, currentArtifact, format);
-  const blob = output instanceof Uint8Array ? new Blob([output], { type: format === "glb" ? "model/gltf-binary" : "application/octet-stream" }) : new Blob([String(output)], { type: "application/json" });
+  const blob = output instanceof Uint8Array ? new Blob([output], { type: mimeTypeForFormat(format) }) : new Blob([String(output)], { type: mimeTypeForFormat(format === "json" ? "json" : format) });
   const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `${currentManifest.id}.${format}`; link.click(); setTimeout(() => URL.revokeObjectURL(link.href), 1000); setStatus(`Exported ${format.toUpperCase()}.`);
 }
 
 async function loadRegistry() {
+  viewerHost.dispose(); elements.viewport.replaceChildren();
   const url = elements["registry-url"].value.trim(); setStatus("Loading generator library…"); const snapshot = await registry.load(url); currentManifest = null; currentArtifact = null; recent = uniqueExisting(recent); favorites = uniqueExisting(favorites); renderNavigation(); renderCatalog(); setStatus(`${snapshot.kits.length} generators ready.`); diagnostics({ registry: snapshot.integrity, domains: snapshot.domains.length, kits: snapshot.kits.length });
   const first = uniqueExisting(recent)[0] ?? snapshot.kits[0]?.id; if (first) await selectKit(first);
 }
@@ -163,5 +186,6 @@ elements.randomize.addEventListener("click", () => randomizeCurrent().catch((err
 elements.export.addEventListener("click", () => exportCurrent().catch((error) => { setStatus(error.message, true); diagnostics({ error: error.message }); }));
 elements["load-registry"].addEventListener("click", () => loadRegistry().catch((error) => { setStatus(error.message, true); diagnostics({ error: error.message }); }));
 document.addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); elements.search.focus(); elements.search.select(); } });
+globalThis.addEventListener?.("beforeunload", () => viewerHost.dispose());
 
 loadRegistry().catch((error) => { setStatus(error.message, true); diagnostics({ error: error.message, hint: "Enable Developer mode to inspect or replace the registry URL." }); });
