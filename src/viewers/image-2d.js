@@ -37,10 +37,8 @@ export class Image2DViewer {
     if (artifact?.artifactKind !== "image" || !image) throw new TypeError("Image2DViewer requires an image artifact.");
     if (!Number.isInteger(image.width) || image.width <= 0 || !Number.isInteger(image.height) || image.height <= 0) throw new TypeError("Image2DViewer requires positive integer image dimensions.");
     if (image.pixelFormat !== "rgba8" || image.channels !== 4) throw new TypeError("Image2DViewer only supports rgba8 image artifacts.");
-
     const pixels = decodeRgbaBase64(image.rgbaBase64);
     if (pixels.length !== image.width * image.height * 4) throw new TypeError(`RGBA payload length ${pixels.length} does not match ${image.width}x${image.height}.`);
-
     this.image = image;
     this.sourceCanvas.width = image.width;
     this.sourceCanvas.height = image.height;
@@ -66,6 +64,10 @@ export class Image2DViewer {
     const rect = computeDisplayRect(this.image.width, this.image.height, width, height);
     this.context.imageSmoothingEnabled = this.image.sampling !== "nearest";
     this.context.drawImage(this.sourceCanvas, rect.x, rect.y, rect.width, rect.height);
+  }
+
+  snapshot(type = "image/png") {
+    return new Promise((resolve, reject) => this.canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("2D snapshot failed.")), type));
   }
 
   dispose() {
