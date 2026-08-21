@@ -28,13 +28,22 @@
       <div id="controls"></div>
       <details id="advanced" class="advanced" hidden><summary>Advanced</summary><div id="advanced-controls"></div></details>
       <div id="actions" class="actions" hidden>
-        <div class="randomize-row"><button id="randomize" class="primary">Randomize</button><select id="randomize-group" aria-label="Randomize group"></select></div>
-        <button id="export">Export</button>
+        <div class="randomize-row">
+          <button id="randomize" class="primary">Randomize</button>
+          <select id="randomize-group" aria-label="Randomize group"></select>
+        </div>
+        <button id="reroll-seed" title="Keep parameters and generate a new individual">Reroll Seed</button>
+        <div class="utility-row"><button id="snapshot">Snapshot</button><button id="export">Export</button></div>
       </div>
       <section id="developer-panel" class="developer-panel" hidden>
         <div class="panel-title">Developer</div>
         <label class="dev-field">Registry URL<input id="registry-url" /></label>
         <button id="load-registry">Reload Registry</button>
+        <div id="phase-inspector" class="phase-inspector" hidden>
+          <div class="panel-title">Generation phases</div>
+          <div id="phase-actions" class="phase-actions"></div>
+          <pre id="phase-state">No phase state.</pre>
+        </div>
         <pre id="kit-meta"></pre>
         <pre id="diagnostics">Ready.</pre>
       </section>
