@@ -4,39 +4,15 @@ A thin, registry-driven visual host for `NexusFactory-Kits`.
 
 ## Boundary
 
-Studio owns **loading, inspection, viewing, snapshots, and download UX** — not factory-generation semantics:
+Studio owns **loading, inspection, viewing, snapshots, and download UX** — not factory-generation semantics. It loads the registry, derives editor surfaces from manifests, invokes generic Kit services, selects generic viewers, inspects declared phases, and downloads Kit-provided exports.
 
-- load a NexusFactory registry
-- discover domains and kits
-- resolve kit modules and service providers
-- render editor surfaces from kit capabilities
-- invoke generic kit services
-- inspect declared generation phases in Developer mode
-- select artifact viewers from kit capabilities
-- render artifact previews
-- capture viewport snapshots
-- download Kit-provided export results
+Generation math, parameter/randomization policy, seed behavior, generation phases, geometry/raster construction, validation, artifact contracts, and export encoding remain inside `NexusFactory-Kits`.
 
-Generation math, parameter/randomization policy, seed behavior, growth, curves, mesh construction, normals, validation, variation, artifact contracts, and export encoding remain inside `NexusFactory-Kits`.
+No Studio code knows what a tree, ballista, coral, fish, reef, aquarium, or other generator subject is.
 
-## Flow
+## Generic runtime
 
-```text
-Studio boots
-  → loads registry.json
-  → discovers kits
-  → imports selected kit module
-  → describe()
-  → derives editor surfaces
-  → invokes kit service
-  → receives state/artifact/export result
-  → selects generic viewer
-  → displays or downloads result
-```
-
-No Studio code knows what a tree, ballista, coral, or future generator subject is.
-
-The generic runtime can invoke:
+Studio can invoke:
 
 - `describe`
 - `createState`
@@ -48,7 +24,7 @@ The generic runtime can invoke:
 - `validate`
 - `export`
 
-Kits only expose the services they support. Developer phase controls are generated from manifest metadata rather than hard-coded generator knowledge.
+Kits expose only the services they support. Developer phase controls are generated from manifest metadata rather than hard-coded generator knowledge.
 
 ## Artifact previews
 
@@ -57,44 +33,19 @@ Current generic preview types:
 - `mesh-3d` — Three.js viewer for mesh artifacts
 - `image-2d` — canvas viewer for RGBA image artifacts
 
-The 3D viewer consumes Kit-provided `positions`, `normals`, `indices`, and materials. Studio does not compute asset normals or geometry.
+Snapshot and export remain separate: Studio owns viewport snapshots; Kits own artifact export encoding.
+
+## Live registry
+
+`main` is the live channel. Studio loads the current NexusFactory-Kits registry by default:
 
 ```text
-Kit artifact
-    |
-    +-- preview: mesh-3d
-    |       → Mesh3DViewer
-    |
-    +-- preview: image-2d
-            → Image2DViewer
+https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@main/registry.json
 ```
 
-## Snapshot vs export
+Registry fetches are cache-busted by `RegistryHost`; relative Kit module resolution remains anchored to the canonical registry URL. If a live Kit has a defect, the owning repository fixes and validates `main` forward rather than pinning Studio backward to an older revision.
 
-These are intentionally separate responsibilities:
-
-```text
-Snapshot
-  viewport → PNG
-  owned by Studio/viewer
-
-Export
-  artifact → GLB/PNG/JSON/etc.
-  encoded by Kit
-  downloaded by Studio
-```
-
-Kit export services return `nexusfactory.export-result/1`, including the format, MIME type, file name, and bytes/text.
-
-## Default registry
-
-The browser is pinned to the tested Kits revision containing the typed phased Tree runtime and standardized Ballista/Coral adapters:
-
-```text
-https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@338129e1ab86aad7b7da054a3888fe2c3ead493a/registry.json
-```
-
-The pin keeps the registry snapshot and relative kit modules on one immutable revision. Developer mode can load another compatible registry URL when required.
+Developer mode can still load another compatible registry URL explicitly.
 
 ## Run
 

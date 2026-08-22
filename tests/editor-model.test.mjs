@@ -25,41 +25,25 @@ test("catalog uses human categories and search", () => {
   assert.deepEqual(buildCatalog(kits,"ball").map((x)=>x.id), ["b"]);
 });
 
-test("Coral image manifest derives entirely generic Studio surfaces", () => {
-  const manifest = {
-    id:"factory-texture-coral", displayName:"Coral Generator", domainPath:"n:factory:texture",
-    provides:["artifact:image","seed:deterministic","editor:parameters","export:png"],
-    parameterSchema:[
-      {id:"mode",type:"select",options:["asset","reef"],default:"asset"},
-      {id:"species",type:"select",options:["staghorn","elkhorn","brain","pillar","lettuce","sea-fan","sea-rod","mixed"],default:"staghorn"},
-      {id:"palette",type:"select",options:["pink","orange"],default:"pink"},
-      {id:"size",type:"number",minimum:0,maximum:1,default:.55},
-      {id:"density",type:"number",minimum:0,maximum:1,default:.58},
-      {id:"asymmetry",type:"number",minimum:0,maximum:1,default:.28},
-      {id:"highlight",type:"number",minimum:0,maximum:1,default:.55},
-      {id:"reefComplexity",type:"number",minimum:0,maximum:1,default:.62},
-      {id:"fishDensity",type:"number",minimum:0,maximum:1,default:.48},
-      {id:"waterStyle",type:"select",options:["tropical"],default:"tropical"}
-    ],
-    editor:{
-      title:"Coral Generator",category:"Textures",preview:"image-2d",surfaces:["seed","parameters","export","diagnostics"],
-      primary:["mode","species","palette","size","density","asymmetry"],
-      advanced:["highlight","reefComplexity","fishDensity","waterStyle","seed"],internal:[],
-      randomizationGroups:[
-        {id:"everything",label:"Everything",parameters:["mode","species","palette","size","density","asymmetry","highlight","reefComplexity","fishDensity","waterStyle"],rerollSeed:true},
-        {id:"form",label:"Form",parameters:["species","size","density","asymmetry"],rerollSeed:false},
-        {id:"color",label:"Color",parameters:["palette","highlight","waterStyle"],rerollSeed:false},
-        {id:"scene",label:"Scene",parameters:["reefComplexity","fishDensity"],rerollSeed:false}
-      ]
-    }
-  };
-  const model=deriveEditorModel(manifest);
-  assert.equal(model.title,"Coral Generator");
-  assert.equal(model.category,"Textures");
-  assert.equal(model.preview,"image-2d");
-  assert.deepEqual(model.primaryParameters.map((x)=>x.id),["mode","species","palette","size","density","asymmetry"]);
-  assert.deepEqual(model.advancedParameters.map((x)=>x.id),["highlight","reefComplexity","fishDensity","waterStyle"]);
-  assert.equal(model.showSeed,true);
-  assert.deepEqual(model.exportFormats,["png"]);
-  assert.deepEqual(model.randomizationGroups.map((x)=>x.id),["everything","form","color","scene"]);
+const imageManifest=(id,title,domainPath,category,{phased=false}={})=>({
+  id,displayName:title,domainPath,
+  provides:["artifact:image","seed:deterministic","editor:parameters","export:png",...(phased?["factory:phases"]:[])],
+  services:["describe","generate","randomize","reroll","validate","export",...(phased?["createState","inspectState","runPhase"]:[])],
+  parameterSchema:[{id:"density",label:"Density",type:"number",minimum:0,maximum:1,default:.5}],
+  editor:{title,category,preview:"image-2d",surfaces:["seed","parameters","export","diagnostics",...(phased?["phases"]:[])],primary:["density"],advanced:["seed"],internal:[],randomizationGroups:[{id:"everything",label:"Everything",parameters:["density"],rerollSeed:true}]},
+  metadata:phased?{phaseOrder:["terrain","environment","population","placement","subjects","effects","compose","artifact","validate"]}:{}
+});
+
+test("aquatic manifests remain entirely generic Studio inputs", () => {
+  const manifests=[
+    imageManifest("factory-texture-coral","Coral Generator","n:factory:texture:subject:coral","Textures"),
+    imageManifest("factory-texture-fish","Fish Generator","n:factory:texture:subject:fish","Textures"),
+    imageManifest("factory-texture-aquatic-flora","Aquatic Flora Generator","n:factory:texture:subject:aquatic-flora","Textures"),
+    imageManifest("factory-scene-aquatic-reef","Reef Generator","n:factory:scene:aquatic:reef","Scenes",{phased:true}),
+    imageManifest("factory-scene-aquatic-aquarium","Aquarium Generator","n:factory:scene:aquatic:aquarium","Scenes",{phased:true})
+  ];
+  for(const manifest of manifests){const model=deriveEditorModel(manifest);assert.equal(model.preview,"image-2d");assert.equal(model.category,manifest.editor.category);assert.deepEqual(model.exportFormats,["png"]);assert.equal(model.showSeed,true);assert.equal(categoryForKit(manifest),manifest.editor.category);}
+  for(const manifest of manifests.slice(3)){assert.deepEqual(manifest.metadata.phaseOrder,["terrain","environment","population","placement","subjects","effects","compose","artifact","validate"]);assert.ok(manifest.services.includes("runPhase"));}
+  assert.deepEqual(buildCatalog(manifests,"","Textures").map(x=>x.id).sort(),["factory-texture-aquatic-flora","factory-texture-coral","factory-texture-fish"]);
+  assert.deepEqual(buildCatalog(manifests,"","Scenes").map(x=>x.id).sort(),["factory-scene-aquatic-aquarium","factory-scene-aquatic-reef"]);
 });
