@@ -17,6 +17,11 @@ export function deriveEditorModel(manifest) {
   const advanced = select(advancedIds, map).filter((entry) => !internalIds.has(entry.id) && !primarySet.has(entry.id));
   const assigned = new Set([...primarySet, ...advanced.map((entry) => entry.id), ...internalIds]);
   for (const entry of parameters) if (!assigned.has(entry.id)) primary.push(entry);
+  const sections = Object.freeze((manifest.editor?.sections ?? []).map((section) => Object.freeze({
+    id:String(section.id),label:section.label??String(section.id),parameters:Object.freeze(select(section.parameters??[],map).filter((entry)=>!internalIds.has(entry.id)))
+  })));
+  const debounceMs = Number(manifest.editor?.generation?.debounceMs ?? 180);
+  const generation = Object.freeze({ mode:manifest.editor?.generation?.mode === "manual" ? "manual" : "debounced", debounceMs:Number.isFinite(debounceMs)?Math.max(0,Math.min(5000,debounceMs)):180 });
   return Object.freeze({
     kitId: manifest.id,
     title: manifest.editor?.title ?? manifest.displayName ?? manifest.id,
@@ -28,6 +33,8 @@ export function deriveEditorModel(manifest) {
     primaryParameters: Object.freeze(primary),
     advancedParameters: Object.freeze(advanced),
     internalParameters: Object.freeze(select([...internalIds], map)),
+    sections,
+    generation,
     surfaces: Object.freeze([...surfaces]),
     showSeed: (manifest.editor?.advanced ?? []).includes("seed") || surfaces.has("seed") || manifest.provides?.includes("seed:deterministic"),
     showAnimation: surfaces.has("animation") || manifest.provides?.includes("artifact:animation"),

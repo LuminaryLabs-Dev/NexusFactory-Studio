@@ -12,28 +12,16 @@ No Studio code knows what a tree, ballista, coral, fish, reef, aquarium, or othe
 
 ## Generic runtime
 
-Studio can invoke:
-
-- `describe`
-- `createState`
-- `inspectState`
-- `runPhase`
-- `generate`
-- `randomize`
-- `reroll`
-- `validate`
-- `export`
-
-Kits expose only the services they support. Developer phase controls are generated from manifest metadata rather than hard-coded generator knowledge.
+Studio can invoke `describe`, phased generation services, `generate`, `randomize`, `reroll`, `validate`, and `export`. Controls, sections, debounce policy, randomization groups, preview selection, and export formats come from each Kit manifest.
 
 ## Artifact previews
 
 Current generic preview types:
 
-- `mesh-3d` — Three.js viewer for mesh artifacts
+- `mesh-3d` — Three.js viewer for mesh and textured-mesh artifacts
 - `image-2d` — canvas viewer for RGBA image artifacts
 
-Snapshot and export remain separate: Studio owns viewport snapshots; Kits own artifact export encoding.
+The 3D viewer supports positions, normals, indices, UVs, tangents, vertex colors, artifact textures, standard PBR maps, alpha modes, clearcoat, iridescence, transmission, render hints, ACES tone mapping, and artifact-owned sidedness. Snapshot and export remain separate: Studio owns viewport snapshots; Kits own artifact export encoding.
 
 ## Live registry
 
@@ -43,9 +31,7 @@ Snapshot and export remain separate: Studio owns viewport snapshots; Kits own ar
 https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@main/registry.json
 ```
 
-Registry fetches are cache-busted by `RegistryHost`; relative Kit module resolution remains anchored to the canonical registry URL. If a live Kit has a defect, the owning repository fixes and validates `main` forward rather than pinning Studio backward to an older revision.
-
-Developer mode can still load another compatible registry URL explicitly.
+Registry fetches and dynamic module imports are cache-busted. Developer mode can load another compatible registry URL explicitly.
 
 ## Run
 
@@ -56,4 +42,4 @@ npm run serve
 
 Open `http://localhost:4173`.
 
-The 3D preview uses Three.js `0.165.0`; the image preview preserves nearest-neighbor rendering for pixel-art artifacts.
+The 3D preview uses Three.js `0.165.0`. The image preview preserves nearest-neighbor rendering for pixel-art artifacts.

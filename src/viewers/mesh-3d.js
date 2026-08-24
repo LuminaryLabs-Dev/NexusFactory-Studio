@@ -1,26 +1,49 @@
 import * as THREE from "https://esm.sh/three@0.165.0";
+import { createArtifactTextureCache } from "./artifact-texture.js";
+import { createMeshGeometry } from "./mesh-geometry.js";
+import { createMeshMaterial } from "./mesh-material.js";
 
 export class Mesh3DViewer {
   constructor(container) {
     this.container = container;
     this.disposed = false;
     this.frame = null;
+    this.textureCache = null;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0b1018);
-    this.camera = new THREE.PerspectiveCamera(45, 1, 0.01, 1000);
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    this.camera = new THREE.PerspectiveCamera(42, 1, 0.01, 1000);
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: false });
     this.renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio ?? 1, 2));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.08;
     this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    if ('useLegacyLights' in this.renderer) this.renderer.useLegacyLights = false;
     this.container.appendChild(this.renderer.domElement);
     this.group = new THREE.Group();
     this.scene.add(this.group);
-    this.scene.add(new THREE.HemisphereLight(0xbfd8ff, 0x17202b, 1.8));
-    const key = new THREE.DirectionalLight(0xffffff, 2.5);
-    key.position.set(5, 8, 6);
-    this.scene.add(key);
-    const grid = new THREE.GridHelper(12, 24, 0x29384c, 0x182230);
-    this.scene.add(grid);
+
+    this.scene.add(new THREE.HemisphereLight(0xc9e6ff, 0x10202a, 1.55));
+    this.key = new THREE.DirectionalLight(0xffffff, 3.2);
+    this.key.position.set(5, 8, 7);
+    this.key.castShadow = true;
+    this.key.shadow.mapSize.set(2048, 2048);
+    this.scene.add(this.key);
+    this.fill = new THREE.DirectionalLight(0x76c8d8, 1.05);
+    this.fill.position.set(-5, 2, 4);
+    this.scene.add(this.fill);
+    this.rim = new THREE.DirectionalLight(0x8fa8ff, 1.7);
+    this.rim.position.set(-2, 5, -7);
+    this.scene.add(this.rim);
+
+    this.grid = new THREE.GridHelper(12, 24, 0x29384c, 0x182230);
+    this.scene.add(this.grid);
+    this.floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.ShadowMaterial({ color: 0x000000, opacity: 0.22 }));
+    this.floor.rotation.x = -Math.PI / 2;
+    this.floor.receiveShadow = true;
+    this.scene.add(this.floor);
+
     this.azimuth = Math.PI * 0.28;
     this.elevation = Math.PI * 0.19;
     this.distance = 8;
@@ -66,38 +89,40 @@ export class Mesh3DViewer {
       child.material?.dispose?.();
       this.group.remove(child);
     }
+    this.textureCache?.dispose?.();
+    this.textureCache = null;
   }
 
   show(artifact) {
     if (this.disposed) throw new Error("Cannot show an artifact on a disposed Mesh3DViewer.");
     this.clear();
     const palette = artifact.materials ?? {};
+    this.textureCache = createArtifactTextureCache(THREE, artifact);
     for (const source of artifact.meshes ?? []) {
-      if (!Array.isArray(source.positions) || !Array.isArray(source.indices)) throw new TypeError(`Mesh ${source.id ?? "unknown"} requires positions and indices.`);
-      if (!Array.isArray(source.normals) || source.normals.length !== source.positions.length) throw new TypeError(`Mesh ${source.id ?? "unknown"} requires Kit-provided normals.`);
-      const geometry = new THREE.BufferGeometry();
-      geometry.setAttribute("position", new THREE.Float32BufferAttribute(source.positions, 3));
-      geometry.setAttribute("normal", new THREE.Float32BufferAttribute(source.normals, 3));
-      geometry.setIndex(source.indices);
       const materialSource = palette[source.material] ?? {};
-      const color = materialSource.baseColor ?? [0.65, 0.68, 0.72, 1];
-      const material = new THREE.MeshStandardMaterial({
-        color: new THREE.Color(color[0], color[1], color[2]),
-        metalness: materialSource.metallic ?? 0,
-        roughness: materialSource.roughness ?? 0.7,
-        flatShading: false,
-        side: THREE.DoubleSide
-      });
+      const geometry = createMeshGeometry(THREE, source, materialSource);
+      const material = createMeshMaterial(THREE, { ...materialSource, doubleSided: source.doubleSided ?? materialSource.doubleSided }, this.textureCache);
       const mesh = new THREE.Mesh(geometry, material);
       mesh.name = source.id;
+      mesh.castShadow = material.transparent !== true;
+      mesh.receiveShadow = true;
       this.group.add(mesh);
     }
+    const hints = artifact.metadata?.renderHints ?? {};
+    if (hints.background) this.scene.background = new THREE.Color(hints.background);
+    this.grid.visible = hints.showGrid !== false;
+    this.floor.visible = hints.showGround !== false;
     const box = new THREE.Box3().setFromObject(this.group);
     if (!box.isEmpty()) {
       box.getCenter(this.target);
       const sphere = box.getBoundingSphere(new THREE.Sphere());
-      this.distance = Math.max(2.5, sphere.radius * 2.7);
+      const framing = Number(hints.camera?.framing ?? 1);
+      this.distance = Math.max(2.5, sphere.radius * 2.7 * (Number.isFinite(framing) ? framing : 1));
+      this.floor.position.y = box.min.y - Math.max(0.015, sphere.radius * 0.015);
+      this.grid.position.y = this.floor.position.y + 0.002;
     }
+    if (Number.isFinite(hints.camera?.azimuth)) this.azimuth = hints.camera.azimuth;
+    if (Number.isFinite(hints.camera?.elevation)) this.elevation = hints.camera.elevation;
   }
 
   snapshot(type = "image/png") {
@@ -131,6 +156,10 @@ export class Mesh3DViewer {
     canvas.removeEventListener("pointercancel", this.handlers.pointerup);
     canvas.removeEventListener("wheel", this.handlers.wheel);
     this.clear();
+    this.floor.geometry.dispose();
+    this.floor.material.dispose();
+    this.grid.geometry?.dispose?.();
+    this.grid.material?.dispose?.();
     this.renderer.dispose();
     this.renderer.forceContextLoss?.();
     canvas.remove();
