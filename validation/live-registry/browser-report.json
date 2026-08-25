@@ -1,0 +1,400 @@
+{
+  "schemaVersion": "nexusfactory.studio-browser-validation/1",
+  "generatedAt": "2026-08-25T04:07:41.542Z",
+  "siteUrl": "https://luminarylabs-dev.github.io/NexusFactory-Studio/",
+  "liveRegistryUrl": "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@main/registry.json",
+  "registryKitCount": 8,
+  "overallResult": "PARTIAL",
+  "summary": {
+    "liveRegistryLoaded": true,
+    "imageKitsFullyExercisedInBrowser": 5,
+    "meshKitsGeneratedValidatedRandomizedRerolledAndExportedInBrowser": 3,
+    "meshPreviewsRenderedInCloudBrowser": 0,
+    "renderImages": 10
+  },
+  "environmentLimitation": {
+    "code": "CLOUD_BROWSER_NO_WEBGL",
+    "observedMessage": "Error creating WebGL context.",
+    "impact": "The three mesh artifacts reached validation and GLB export, but their Three.js previews could not be rendered in this cloud browser.",
+    "applicationFailure": false
+  },
+  "actions": [
+    {
+      "kitId": "factory-texture-coral",
+      "generated": {
+        "valid": true,
+        "hash": "sha256:bdd03109f93b5d5f8f3dcf2a98a46b80dab8b87003685fde0608c051c299c8f5"
+      },
+      "randomized": {
+        "valid": true,
+        "group": "everything",
+        "seed": "factory-texture-coral:001:reroll:10962328:1570528736:5b2b119"
+      },
+      "rerolled": {
+        "valid": true,
+        "seed": "factory-texture-coral:001:reroll:10962328:1570528736:5b2b119:individual:3979875784:3974493462:fba001c0"
+      },
+      "export": "Exported PNG.",
+      "clickTransportWarningCount": 0
+    },
+    {
+      "kitId": "factory-texture-fish",
+      "generated": {
+        "valid": true,
+        "hash": "sha256:d9f4618bf5165ac734e0221866f0f84fc9fe03cf7cd57535daa91739de25f7a2"
+      },
+      "randomized": {
+        "valid": true,
+        "group": "everything",
+        "seed": "factory-texture-fish:001:reroll:1787630662036:0.27865579435899934:81f399f3"
+      },
+      "rerolled": {
+        "valid": true,
+        "seed": "factory-texture-fish:001:reroll:1787630662036:0.27865579435899934:81f399f3:individual:1787630665086:0.27746617117670147:5e502e5e"
+      },
+      "export": "Exported PNG.",
+      "clickTransportWarningCount": 0
+    },
+    {
+      "kitId": "factory-texture-aquatic-flora",
+      "generated": {
+        "valid": true,
+        "hash": "sha256:a9decb61f4c2cd5aae4632a85a8e6c212ab0f79c40cd7a67d989d53e1c4fa8d3"
+      },
+      "randomized": {
+        "valid": true,
+        "group": "everything",
+        "seed": "factory-texture-aquatic-flora:001:reroll:1787630674335:0.3433102476692379:40f80e73"
+      },
+      "rerolled": {
+        "valid": true,
+        "seed": "factory-texture-aquatic-flora:001:reroll:1787630674335:0.3433102476692379:40f80e73:individual:1787630677386:0.997630231136442:761336fc"
+      },
+      "export": "Exported PNG.",
+      "clickTransportWarningCount": 0
+    },
+    {
+      "kitId": "factory-scene-aquatic-reef",
+      "generated": {
+        "valid": true,
+        "hash": "sha256:dee7cd8c25584d5af6801ba74148c9aff8b5aebc138f6bdef78518cf6d704941"
+      },
+      "randomized": {
+        "valid": true,
+        "group": "everything",
+        "seed": "factory-scene-aquatic-reef:001:reroll:2101908483:2820779440:999f57ac"
+      },
+      "rerolled": {
+        "valid": true,
+        "seed": "factory-scene-aquatic-reef:001:reroll:2101908483:2820779440:999f57ac:individual:2833834779:1417638354:56a89d06"
+      },
+      "export": "Exported PNG.",
+      "clickTransportWarningCount": 0
+    },
+    {
+      "kitId": "factory-scene-aquatic-aquarium",
+      "generated": {
+        "valid": true,
+        "hash": "sha256:d50b3e51ee6b67815cb18263ded495633e6059149c3f77c04c029ba90d96c374"
+      },
+      "randomized": {
+        "valid": true,
+        "group": "everything",
+        "seed": "factory-scene-aquatic-aquarium:001:reroll:2783150712:3943692171:af741f89"
+      },
+      "rerolled": {
+        "valid": true,
+        "seed": "factory-scene-aquatic-aquarium:001:reroll:2783150712:3943692171:af741f89:individual:4121147342:2193160530:50114f25"
+      },
+      "export": "Exported PNG.",
+      "clickTransportWarningCount": 0
+    },
+    {
+      "kitId": "factory-object-creature-fish",
+      "generatedAndValidatedBeforePreview": "Error creating WebGL context.",
+      "randomizeChangedControls": true,
+      "randomizedAndValidatedBeforePreview": "Error creating WebGL context.",
+      "rerollChangedSeedOrControls": true,
+      "rerolledAndValidatedBeforePreview": "Error creating WebGL context.",
+      "export": "Exported GLB.",
+      "preview": "BLOCKED_ENVIRONMENT_NO_WEBGL",
+      "clickTransportWarningCount": 1
+    },
+    {
+      "kitId": "factory-object-foliage-tree",
+      "generatedAndValidatedBeforePreview": "Error creating WebGL context.",
+      "randomizeChangedControls": true,
+      "randomizedAndValidatedBeforePreview": "Error creating WebGL context.",
+      "rerollChangedSeedOrControls": true,
+      "rerolledAndValidatedBeforePreview": "Error creating WebGL context.",
+      "export": "Exported GLB.",
+      "preview": "BLOCKED_ENVIRONMENT_NO_WEBGL",
+      "clickTransportWarningCount": 0
+    },
+    {
+      "kitId": "factory-object-weapon-ballista",
+      "generatedAndValidatedBeforePreview": "Error creating WebGL context.",
+      "randomizeChangedControls": true,
+      "randomizedAndValidatedBeforePreview": "Error creating WebGL context.",
+      "rerollChangedSeedOrControls": true,
+      "rerolledAndValidatedBeforePreview": "Error creating WebGL context.",
+      "export": "Exported GLB.",
+      "preview": "BLOCKED_ENVIRONMENT_NO_WEBGL",
+      "clickTransportWarningCount": 0
+    }
+  ],
+  "renders": [
+    {
+      "fileName": "01-coral-staghorn-pink.jpg",
+      "kitId": "factory-texture-coral",
+      "variation": {
+        "species": "staghorn",
+        "palette": "pink"
+      },
+      "deterministicHash": "sha256:bdd03109f93b5d5f8f3dcf2a98a46b80dab8b87003685fde0608c051c299c8f5",
+      "valid": true,
+      "validationChecks": 13,
+      "statistics": {
+        "pixelCount": 9216,
+        "occupiedPixels": 1481,
+        "occupiedRatio": 0.1606987847222222,
+        "paletteSize": 5,
+        "bounds": {
+          "x": 26,
+          "y": 23,
+          "width": 46,
+          "height": 61
+        },
+        "boundsCoverage": 0.3044704861111111,
+        "connectedComponents": 1
+      }
+    },
+    {
+      "fileName": "02-coral-brain-purple.jpg",
+      "kitId": "factory-texture-coral",
+      "variation": {
+        "species": "brain",
+        "palette": "purple"
+      },
+      "deterministicHash": "sha256:41d213c5521fd7a0d5a3821c484fada9bc603ea8fa240e2d0ea88139fc6c5de9",
+      "valid": true,
+      "validationChecks": 13,
+      "statistics": {
+        "pixelCount": 9216,
+        "occupiedPixels": 1625,
+        "occupiedRatio": 0.1763237847222222,
+        "paletteSize": 5,
+        "bounds": {
+          "x": 18,
+          "y": 47,
+          "width": 61,
+          "height": 39
+        },
+        "boundsCoverage": 0.2581380208333333,
+        "connectedComponents": 1
+      }
+    },
+    {
+      "fileName": "03-fish-streamlined-reef-right.jpg",
+      "kitId": "factory-texture-fish",
+      "variation": {
+        "bodyShape": "streamlined",
+        "palette": "reef",
+        "direction": "right",
+        "finStyle": "fork"
+      },
+      "deterministicHash": "sha256:db648bcf28f5af890cc7a1d29ee076e8c93dc9f7d3a669673a361ee31f46f063",
+      "valid": true,
+      "validationChecks": 12,
+      "statistics": {
+        "pixelCount": 4096,
+        "occupiedPixels": 59,
+        "occupiedRatio": 0.014404296875,
+        "paletteSize": 4,
+        "bounds": {
+          "x": 24,
+          "y": 32,
+          "width": 14,
+          "height": 5
+        },
+        "boundsCoverage": 0.01708984375,
+        "fishCount": 1,
+        "bodyShape": "streamlined",
+        "finStyle": "fork"
+      }
+    },
+    {
+      "fileName": "04-fish-round-blue-left.jpg",
+      "kitId": "factory-texture-fish",
+      "variation": {
+        "bodyShape": "round",
+        "palette": "blue",
+        "direction": "left",
+        "finStyle": "fan"
+      },
+      "deterministicHash": "sha256:4942a77f3c96b8a8508a73be109ecb9484dbab7e894f9f9a9dd22b495d34b4bc",
+      "valid": true,
+      "validationChecks": 12,
+      "statistics": {
+        "pixelCount": 4096,
+        "occupiedPixels": 65,
+        "occupiedRatio": 0.015869140625,
+        "paletteSize": 4,
+        "bounds": {
+          "x": 29,
+          "y": 30,
+          "width": 13,
+          "height": 9
+        },
+        "boundsCoverage": 0.028564453125,
+        "fishCount": 1,
+        "bodyShape": "round",
+        "finStyle": "fan"
+      }
+    },
+    {
+      "fileName": "05-flora-seagrass-green.jpg",
+      "kitId": "factory-texture-aquatic-flora",
+      "variation": {
+        "style": "seagrass",
+        "palette": "green"
+      },
+      "deterministicHash": "sha256:a9decb61f4c2cd5aae4632a85a8e6c212ab0f79c40cd7a67d989d53e1c4fa8d3",
+      "valid": true,
+      "validationChecks": 12,
+      "statistics": {
+        "pixelCount": 4096,
+        "occupiedPixels": 198,
+        "occupiedRatio": 0.04833984375,
+        "paletteSize": 3,
+        "bounds": {
+          "x": 17,
+          "y": 27,
+          "width": 34,
+          "height": 28
+        },
+        "boundsCoverage": 0.232421875,
+        "stemCount": 9,
+        "style": "seagrass"
+      }
+    },
+    {
+      "fileName": "06-flora-kelp-gold.jpg",
+      "kitId": "factory-texture-aquatic-flora",
+      "variation": {
+        "style": "kelp",
+        "palette": "gold"
+      },
+      "deterministicHash": "sha256:debf2a3418777fea0fb1190bd495a8b52c3415b4b26f6fa1c3060e4054be48eb",
+      "valid": true,
+      "validationChecks": 12,
+      "statistics": {
+        "pixelCount": 4096,
+        "occupiedPixels": 588,
+        "occupiedRatio": 0.1435546875,
+        "paletteSize": 3,
+        "bounds": {
+          "x": 16,
+          "y": 26,
+          "width": 36,
+          "height": 30
+        },
+        "boundsCoverage": 0.263671875,
+        "stemCount": 9,
+        "style": "kelp"
+      }
+    },
+    {
+      "fileName": "07-reef-mixed-pink-tropical.jpg",
+      "kitId": "factory-scene-aquatic-reef",
+      "variation": {
+        "species": "mixed",
+        "palette": "pink",
+        "waterStyle": "tropical"
+      },
+      "deterministicHash": "sha256:dee7cd8c25584d5af6801ba74148c9aff8b5aebc138f6bdef78518cf6d704941",
+      "valid": true,
+      "validationChecks": 13,
+      "statistics": {
+        "pixelCount": 16384,
+        "coralCount": 13,
+        "fishCount": 9,
+        "floraCount": 15,
+        "layerCounts": {
+          "back": 3,
+          "mid": 5,
+          "front": 5
+        }
+      }
+    },
+    {
+      "fileName": "08-reef-sea-fan-purple-deep.jpg",
+      "kitId": "factory-scene-aquatic-reef",
+      "variation": {
+        "species": "sea-fan",
+        "palette": "purple",
+        "waterStyle": "deep"
+      },
+      "deterministicHash": "sha256:ae13c04c239c69a7704afe4821bb7132f0193250562e7b0a40fd869475989375",
+      "valid": true,
+      "validationChecks": 13,
+      "statistics": {
+        "pixelCount": 16384,
+        "coralCount": 13,
+        "fishCount": 9,
+        "floraCount": 15,
+        "layerCounts": {
+          "back": 3,
+          "mid": 5,
+          "front": 5
+        }
+      }
+    },
+    {
+      "fileName": "09-aquarium-mixed-gold-emerald.jpg",
+      "kitId": "factory-scene-aquatic-aquarium",
+      "variation": {
+        "species": "mixed",
+        "palette": "gold",
+        "waterStyle": "emerald"
+      },
+      "deterministicHash": "sha256:b6e60b68494506a17ec0bcce095e335c6d65ad64eecfd4bdaf5e71919358c58e",
+      "valid": true,
+      "validationChecks": 13,
+      "statistics": {
+        "pixelCount": 16384,
+        "coralCount": 9,
+        "fishCount": 11,
+        "floraCount": 14,
+        "layerCounts": {
+          "back": 2,
+          "display": 4,
+          "front": 3
+        }
+      }
+    },
+    {
+      "fileName": "10-aquarium-brain-orange-tropical.jpg",
+      "kitId": "factory-scene-aquatic-aquarium",
+      "variation": {
+        "species": "brain",
+        "palette": "orange",
+        "waterStyle": "tropical"
+      },
+      "deterministicHash": "sha256:cbe6300c26064d2d823a42486fa5771d94cdb9020b89b29acd6b91c2ffa12fd9",
+      "valid": true,
+      "validationChecks": 13,
+      "statistics": {
+        "pixelCount": 16384,
+        "coralCount": 9,
+        "fishCount": 11,
+        "floraCount": 14,
+        "layerCounts": {
+          "back": 2,
+          "display": 4,
+          "front": 3
+        }
+      }
+    }
+  ]
+}

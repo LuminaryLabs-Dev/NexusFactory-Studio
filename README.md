@@ -43,3 +43,14 @@ npm run serve
 Open `http://localhost:4173`.
 
 The 3D preview uses Three.js `0.165.0`. The image preview preserves nearest-neighbor rendering for pixel-art artifacts.
+
+## Validate the live Kit channel
+
+The networked validator downloads each live Kit module and every relative dependency into a separate temporary ESM tree. It imports and exercises one Kit at a time, including deterministic generation, randomization, reroll, validation, declared phases, and export.
+
+```bash
+npm run validate:live-registry
+npm run validate:live-registry -- --report validation/live-registry/module-report.json
+```
+
+The command does not use the local `NexusFactory-Kits` checkout. It requires network access to the configured registry and source-module host. The current module report, browser report, and exactly ten browser renders are documented in [`validation/live-registry/README.md`](validation/live-registry/README.md).

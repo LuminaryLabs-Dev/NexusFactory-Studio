@@ -1,0 +1,642 @@
+{
+  "schemaVersion": "nexusfactory.live-registry-validation/1",
+  "generatedAt": "2026-08-25T03:46:40.378Z",
+  "startedAt": "2026-08-25T03:45:26.658Z",
+  "registryUrl": "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@main/registry.json",
+  "registryIntegrity": "sha256:376af9547304ce640243435008db7a816277a9dd8cfea83151e8b2802e71f658",
+  "registrySha256": "sha256:62514ac2366e3ef5830abe8600796df0dd563a4623aba8b9e0376ebab1888aa4",
+  "domains": 45,
+  "kits": 8,
+  "passed": 8,
+  "failed": 0,
+  "result": "PASS",
+  "checks": [
+    "module-pull",
+    "module-import",
+    "describe",
+    "generate",
+    "determinism",
+    "randomize",
+    "reroll",
+    "validate",
+    "phases-when-declared",
+    "export"
+  ],
+  "results": [
+    {
+      "id": "factory-object-creature-fish",
+      "displayName": "Procedural Reef Fish",
+      "version": "0.1.0",
+      "preview": "mesh-3d",
+      "sourceModule": "src/domains/factory/object/creature/aquatic/kits/fish-kit/index.js",
+      "contentFingerprint": "sha256:9d09eb3f92a1307bde365142963d49d8ac2da5824a6d4b0690565a2f19535da2",
+      "modulesPulled": 17,
+      "moduleFiles": [
+        "src/domains/factory/object/creature/aquatic/kits/fish-kit/index.js",
+        "src/contracts.js",
+        "src/foundation/hash.js",
+        "src/foundation/geometry.js",
+        "src/foundation/random.js",
+        "src/foundation/glb.js",
+        "src/foundation/raster/surface.js",
+        "src/foundation/raster/png.js",
+        "src/domains/factory/object/creature/aquatic/fish/artifact.js",
+        "src/domains/factory/object/creature/aquatic/fish/generator.js",
+        "src/domains/factory/object/creature/aquatic/fish/math.js",
+        "src/domains/factory/object/creature/aquatic/fish/geometry.js",
+        "src/domains/factory/object/creature/aquatic/fish/textures.js",
+        "src/domains/factory/object/creature/aquatic/fish/validation.js",
+        "src/domains/factory/object/creature/aquatic/kits/fish-kit/config.js",
+        "src/domains/factory/object/creature/aquatic/kits/fish-kit/spec.js",
+        "src/domain.js"
+      ],
+      "services": [
+        "describe",
+        "createState",
+        "inspectState",
+        "runPhase",
+        "generate",
+        "randomize",
+        "reroll",
+        "validate",
+        "export"
+      ],
+      "deterministicHash": "sha256:545f50a2101b7cd441e7e138549c15209b37311bcb110c6b6a14f0e1892ff7d8",
+      "deterministicRepeat": true,
+      "artifact": {
+        "kind": "textured-mesh-3d",
+        "meshCount": 44,
+        "vertexCount": 8220,
+        "triangleCount": 14256,
+        "textureCount": 9
+      },
+      "validationChecks": 744,
+      "randomize": {
+        "groupId": "everything",
+        "seed": "factory-object-creature-fish:live-registry-validation:reroll:live-registry-fixed-randomize:23197819",
+        "hash": "sha256:3841583ee49d2c639693590e29d47c1a20a292de6ef255412e28aab5e5d941b4",
+        "valid": true
+      },
+      "reroll": {
+        "seed": "factory-object-creature-fish:live-registry-validation:individual:live-registry-fixed-reroll:13357ae3",
+        "hash": "sha256:da9ee4f08d26027da3dac10387cd3d7660b2e993e07eb5ee3155a4b203f067a3",
+        "valid": true
+      },
+      "phases": {
+        "order": [
+          "anatomy",
+          "appendages",
+          "face",
+          "surface",
+          "artifact",
+          "validate"
+        ],
+        "initialCompleted": [
+          "spec"
+        ],
+        "completed": [
+          "spec",
+          "anatomy",
+          "appendages",
+          "face",
+          "surface",
+          "artifact",
+          "validate"
+        ]
+      },
+      "export": {
+        "format": "glb",
+        "mimeType": "model/gltf-binary",
+        "fileName": "reef-fish-892ff7d8.glb",
+        "bytes": 3754208
+      }
+    },
+    {
+      "id": "factory-object-foliage-tree",
+      "displayName": "Procedural Broadleaf Tree",
+      "version": "0.2.0",
+      "preview": "mesh-3d",
+      "sourceModule": "src/domains/factory/object/foliage/kits/tree-kit/index.js",
+      "contentFingerprint": "sha256:ff20fea03e98f88daf56163556e18cad9fdc58633c2b9e69b642533dc6c91415",
+      "modulesPulled": 16,
+      "moduleFiles": [
+        "src/domains/factory/object/foliage/kits/tree-kit/index.js",
+        "src/contracts.js",
+        "src/foundation/hash.js",
+        "src/foundation/geometry.js",
+        "src/foundation/random.js",
+        "src/foundation/glb.js",
+        "src/foundation/raster/surface.js",
+        "src/foundation/raster/png.js",
+        "src/domains/factory/object/foliage/tree/growth/index.js",
+        "src/domain.js",
+        "src/domains/factory/object/foliage/tree/curve/bezier/index.js",
+        "src/domains/factory/object/foliage/tree/wood/index.js",
+        "src/domains/factory/object/foliage/tree/crown/index.js",
+        "src/domains/factory/object/foliage/kits/tree-kit/config.js",
+        "src/domains/factory/object/foliage/kits/tree-kit/profiles/storybook-clay.js",
+        "src/domains/factory/object/foliage/kits/tree-kit/spec.js"
+      ],
+      "services": [
+        "describe",
+        "createState",
+        "inspectState",
+        "runPhase",
+        "generate",
+        "randomize",
+        "reroll",
+        "validate",
+        "export"
+      ],
+      "deterministicHash": "sha256:313d8305a9cdf978cc5609d49f229df710453cd8b0019405da61db184bb052fc",
+      "deterministicRepeat": true,
+      "artifact": {
+        "kind": "mesh-3d",
+        "meshCount": 2,
+        "vertexCount": 2023,
+        "triangleCount": 3969,
+        "textureCount": 0
+      },
+      "validationChecks": 21,
+      "randomize": {
+        "groupId": "everything",
+        "seed": "factory-object-foliage-tree:live-registry-validation",
+        "hash": "sha256:80b746bf4f5de891e6ae973871dd97ae83b31fabb90a18ff68597718d0a2ebbf",
+        "valid": true
+      },
+      "reroll": {
+        "seed": "factory-object-foliage-tree:live-registry-validation:individual:live-registry-fixed-reroll:f5bf2b0f",
+        "hash": "sha256:d130f92a1dbc1d6ec9d139d5ecb0bc0301f805187a14d8bc74e5a60a83830ffb",
+        "valid": true
+      },
+      "phases": {
+        "order": [
+          "growth",
+          "bezier",
+          "wood",
+          "foliage",
+          "artifact",
+          "validate"
+        ],
+        "initialCompleted": [
+          "spec"
+        ],
+        "completed": [
+          "spec",
+          "growth",
+          "bezier",
+          "wood",
+          "foliage",
+          "artifact",
+          "validate"
+        ]
+      },
+      "export": {
+        "format": "glb",
+        "mimeType": "model/gltf-binary",
+        "fileName": "storybook-tree-4bb052fc.glb",
+        "bytes": 77940
+      }
+    },
+    {
+      "id": "factory-object-weapon-ballista",
+      "displayName": "Windup Ballista Turret",
+      "version": "0.1.0",
+      "preview": "mesh-3d",
+      "sourceModule": "src/domains/factory/object/weapon/kits/ballista-kit/runtime.js",
+      "contentFingerprint": "sha256:bf861561565d66b312af0515b8bf019d4f0a6f37cb675fec7afbc73300bb985c",
+      "modulesPulled": 10,
+      "moduleFiles": [
+        "src/domains/factory/object/weapon/kits/ballista-kit/runtime.js",
+        "src/domain.js",
+        "src/foundation/hash.js",
+        "src/contracts.js",
+        "src/foundation/geometry.js",
+        "src/foundation/random.js",
+        "src/domains/factory/object/weapon/kits/ballista-kit/index.js",
+        "src/foundation/glb.js",
+        "src/foundation/raster/surface.js",
+        "src/foundation/raster/png.js"
+      ],
+      "services": [
+        "describe",
+        "generate",
+        "reroll",
+        "validate",
+        "export",
+        "randomize"
+      ],
+      "deterministicHash": "sha256:6624a52524b455da89c6aee3c341938d6e6fddd8fe404362c55da525e714e107",
+      "deterministicRepeat": true,
+      "artifact": {
+        "kind": "mesh-3d",
+        "meshCount": 20,
+        "vertexCount": 1884,
+        "triangleCount": 628,
+        "textureCount": 0
+      },
+      "validationChecks": 115,
+      "randomize": {
+        "groupId": "everything",
+        "seed": "factory-object-weapon-ballista:live-registry-validation:reroll:live-registry-fixed-randomize:d7b3a44e",
+        "hash": "sha256:0141397db15c2150f21eb8a48485e5aca94e6022a721914f697da875c0e4af63",
+        "valid": true
+      },
+      "reroll": {
+        "seed": "factory-object-weapon-ballista:live-registry-validation:live-registry-fixed-reroll:321f13",
+        "hash": "sha256:b70118903ed6572973d0be4080a841d725e3c89eec9c25ad7c56133fd0f1981f",
+        "valid": true
+      },
+      "phases": null,
+      "export": {
+        "format": "glb",
+        "mimeType": "model/gltf-binary",
+        "fileName": "ballista-e714e107.glb",
+        "bytes": 65188
+      }
+    },
+    {
+      "id": "factory-scene-aquatic-aquarium",
+      "displayName": "Aquarium Generator",
+      "version": "0.1.0",
+      "preview": "image-2d",
+      "sourceModule": "src/domains/factory/scene/kits/aquarium-kit/index.js",
+      "contentFingerprint": "sha256:5f5fd13563bc71fd5b116dc31c839dcf6ac8d5559fdf14ca4cf82710184bfd65",
+      "modulesPulled": 29,
+      "moduleFiles": [
+        "src/domains/factory/scene/kits/aquarium-kit/index.js",
+        "src/domain.js",
+        "src/foundation/hash.js",
+        "src/domains/factory/texture/subject/coral/index.js",
+        "src/foundation/raster/surface.js",
+        "src/foundation/raster/primitives.js",
+        "src/foundation/raster/growth.js",
+        "src/foundation/raster/shading.js",
+        "src/foundation/random.js",
+        "src/domains/factory/texture/environment/index.js",
+        "src/domains/factory/scene/aquatic/aquarium/index.js",
+        "src/domains/factory/scene/aquatic/phased-kit.js",
+        "src/contracts.js",
+        "src/foundation/geometry.js",
+        "src/foundation/raster/png.js",
+        "src/domains/factory/scene/aquatic/pipeline.js",
+        "src/domains/factory/texture/subject/fish/index.js",
+        "src/domains/factory/texture/subject/aquatic-flora/index.js",
+        "src/domains/factory/texture/environment/water/index.js",
+        "src/domains/factory/texture/environment/substrate/index.js",
+        "src/domains/factory/texture/environment/rock/index.js",
+        "src/domains/factory/vfx/aquatic/bubbles/index.js",
+        "src/domains/factory/vfx/aquatic/particles/index.js",
+        "src/domains/factory/vfx/aquatic/light-shafts/index.js",
+        "src/domains/factory/scene/layer/stack/index.js",
+        "src/domains/factory/scene/layer/placement/index.js",
+        "src/domains/factory/scene/terrain/profile/index.js",
+        "src/foundation/noise.js",
+        "src/domains/factory/scene/aquatic/population/index.js"
+      ],
+      "services": [
+        "describe",
+        "createState",
+        "inspectState",
+        "runPhase",
+        "generate",
+        "randomize",
+        "reroll",
+        "validate",
+        "export"
+      ],
+      "deterministicHash": "sha256:f28ffa0378eb1c52e496a23f5bdd4a82d3fa3885e2afa7bef910aee29f9fd708",
+      "deterministicRepeat": true,
+      "artifact": {
+        "kind": "image-2d",
+        "width": 128,
+        "height": 128,
+        "pixelCount": 16384
+      },
+      "validationChecks": 13,
+      "randomize": {
+        "groupId": "everything",
+        "seed": "factory-scene-aquatic-aquarium:live-registry-validation:reroll:live-registry-fixed-randomize:88dbd95a",
+        "hash": "sha256:58dabcbdb4729f92a49534ffc698bb56a09ba0ab7a653079103ba7671c8f025b",
+        "valid": true
+      },
+      "reroll": {
+        "seed": "factory-scene-aquatic-aquarium:live-registry-validation:individual:live-registry-fixed-reroll:12849e92",
+        "hash": "sha256:7b7c7c261c025e8f94dedfaf6db1a48150b9a9fbd08b63354bff2abce66db1e8",
+        "valid": true
+      },
+      "phases": {
+        "order": [
+          "terrain",
+          "environment",
+          "population",
+          "placement",
+          "subjects",
+          "effects",
+          "compose",
+          "artifact",
+          "validate"
+        ],
+        "initialCompleted": [
+          "spec"
+        ],
+        "completed": [
+          "spec",
+          "terrain",
+          "environment",
+          "population",
+          "placement",
+          "subjects",
+          "effects",
+          "compose",
+          "artifact",
+          "validate"
+        ]
+      },
+      "export": {
+        "format": "png",
+        "mimeType": "image/png",
+        "fileName": "aquarium-9f9fd708.png",
+        "bytes": 4195716
+      }
+    },
+    {
+      "id": "factory-scene-aquatic-reef",
+      "displayName": "Reef Generator",
+      "version": "0.1.0",
+      "preview": "image-2d",
+      "sourceModule": "src/domains/factory/scene/kits/reef-kit/index.js",
+      "contentFingerprint": "sha256:b8207b048ef987e4969a2a96ad19b0b73f4073fa62f72960e07d8897d5bd4fe6",
+      "modulesPulled": 29,
+      "moduleFiles": [
+        "src/domains/factory/scene/kits/reef-kit/index.js",
+        "src/domain.js",
+        "src/foundation/hash.js",
+        "src/domains/factory/texture/subject/coral/index.js",
+        "src/foundation/raster/surface.js",
+        "src/foundation/raster/primitives.js",
+        "src/foundation/raster/growth.js",
+        "src/foundation/raster/shading.js",
+        "src/foundation/random.js",
+        "src/domains/factory/texture/environment/index.js",
+        "src/domains/factory/scene/aquatic/reef/index.js",
+        "src/domains/factory/scene/aquatic/phased-kit.js",
+        "src/contracts.js",
+        "src/foundation/geometry.js",
+        "src/foundation/raster/png.js",
+        "src/domains/factory/scene/aquatic/pipeline.js",
+        "src/domains/factory/texture/subject/fish/index.js",
+        "src/domains/factory/texture/subject/aquatic-flora/index.js",
+        "src/domains/factory/texture/environment/water/index.js",
+        "src/domains/factory/texture/environment/substrate/index.js",
+        "src/domains/factory/texture/environment/rock/index.js",
+        "src/domains/factory/vfx/aquatic/bubbles/index.js",
+        "src/domains/factory/vfx/aquatic/particles/index.js",
+        "src/domains/factory/vfx/aquatic/light-shafts/index.js",
+        "src/domains/factory/scene/layer/stack/index.js",
+        "src/domains/factory/scene/layer/placement/index.js",
+        "src/domains/factory/scene/terrain/profile/index.js",
+        "src/foundation/noise.js",
+        "src/domains/factory/scene/aquatic/population/index.js"
+      ],
+      "services": [
+        "describe",
+        "createState",
+        "inspectState",
+        "runPhase",
+        "generate",
+        "randomize",
+        "reroll",
+        "validate",
+        "export"
+      ],
+      "deterministicHash": "sha256:77063f5bb458e59f5aba83e0d7352f0dd6c1494c8549e01916f7c7b447ed5fa1",
+      "deterministicRepeat": true,
+      "artifact": {
+        "kind": "image-2d",
+        "width": 128,
+        "height": 128,
+        "pixelCount": 16384
+      },
+      "validationChecks": 13,
+      "randomize": {
+        "groupId": "everything",
+        "seed": "factory-scene-aquatic-reef:live-registry-validation:reroll:live-registry-fixed-randomize:ce7cddf3",
+        "hash": "sha256:05261a4cb44f38da810f43a40973908b2ce367a4a1dcc11c8db46d243461b862",
+        "valid": true
+      },
+      "reroll": {
+        "seed": "factory-scene-aquatic-reef:live-registry-validation:individual:live-registry-fixed-reroll:928e31e1",
+        "hash": "sha256:b6d65374f7d076fb1b0454bec3d31a8a9d3974b7a28cc7b6e271b1a57e5be2b4",
+        "valid": true
+      },
+      "phases": {
+        "order": [
+          "terrain",
+          "environment",
+          "population",
+          "placement",
+          "subjects",
+          "effects",
+          "compose",
+          "artifact",
+          "validate"
+        ],
+        "initialCompleted": [
+          "spec"
+        ],
+        "completed": [
+          "spec",
+          "terrain",
+          "environment",
+          "population",
+          "placement",
+          "subjects",
+          "effects",
+          "compose",
+          "artifact",
+          "validate"
+        ]
+      },
+      "export": {
+        "format": "png",
+        "mimeType": "image/png",
+        "fileName": "reef-47ed5fa1.png",
+        "bytes": 4195716
+      }
+    },
+    {
+      "id": "factory-texture-aquatic-flora",
+      "displayName": "Aquatic Flora Generator",
+      "version": "0.1.0",
+      "preview": "image-2d",
+      "sourceModule": "src/domains/factory/texture/kits/aquatic-flora-kit/index.js",
+      "contentFingerprint": "sha256:a8d0c97cfb6959f555a010def5ca79eb9b609c9f906d24f3e63c88af0d4b35cd",
+      "modulesPulled": 11,
+      "moduleFiles": [
+        "src/domains/factory/texture/kits/aquatic-flora-kit/index.js",
+        "src/domain.js",
+        "src/foundation/hash.js",
+        "src/contracts.js",
+        "src/foundation/geometry.js",
+        "src/foundation/random.js",
+        "src/foundation/raster/surface.js",
+        "src/foundation/raster/png.js",
+        "src/foundation/raster/metrics.js",
+        "src/domains/factory/texture/subject/aquatic-flora/index.js",
+        "src/foundation/raster/primitives.js"
+      ],
+      "services": [
+        "describe",
+        "generate",
+        "randomize",
+        "reroll",
+        "validate",
+        "export"
+      ],
+      "deterministicHash": "sha256:1ed42732303baca79223c27b666e670baa0e6f2a72b1edbbf14fd500e0fc194a",
+      "deterministicRepeat": true,
+      "artifact": {
+        "kind": "image-2d",
+        "width": 64,
+        "height": 64,
+        "pixelCount": 4096
+      },
+      "validationChecks": 12,
+      "randomize": {
+        "groupId": "everything",
+        "seed": "factory-texture-aquatic-flora:live-registry-validation:reroll:live-registry-fixed-randomize:dc86d880",
+        "hash": "sha256:7fb337a6cd281dc81a0e6b3480420d67dbeca92b05a3ba42e4ccf3f6d369c3cf",
+        "valid": true
+      },
+      "reroll": {
+        "seed": "factory-texture-aquatic-flora:live-registry-validation:individual:live-registry-fixed-reroll:ca358cc",
+        "hash": "sha256:46c3d268f5668097fd5c51cfe351733ca52ad28910ec5dd97c565aed9e8a1b94",
+        "valid": true
+      },
+      "phases": null,
+      "export": {
+        "format": "png",
+        "mimeType": "image/png",
+        "fileName": "aquatic-flora-e0fc194a.png",
+        "bytes": 1049236
+      }
+    },
+    {
+      "id": "factory-texture-coral",
+      "displayName": "Coral Generator",
+      "version": "0.2.0",
+      "preview": "image-2d",
+      "sourceModule": "src/domains/factory/texture/kits/coral-kit/index.js",
+      "contentFingerprint": "sha256:7301de17c34c2221c9fe4872b403f83b6176635e53525dfb7725496e5998d4bc",
+      "modulesPulled": 13,
+      "moduleFiles": [
+        "src/domains/factory/texture/kits/coral-kit/index.js",
+        "src/domain.js",
+        "src/foundation/hash.js",
+        "src/contracts.js",
+        "src/foundation/geometry.js",
+        "src/foundation/random.js",
+        "src/foundation/raster/surface.js",
+        "src/foundation/raster/png.js",
+        "src/foundation/raster/metrics.js",
+        "src/domains/factory/texture/subject/coral/index.js",
+        "src/foundation/raster/primitives.js",
+        "src/foundation/raster/growth.js",
+        "src/foundation/raster/shading.js"
+      ],
+      "services": [
+        "describe",
+        "generate",
+        "randomize",
+        "reroll",
+        "validate",
+        "export"
+      ],
+      "deterministicHash": "sha256:9d82166ab9c86529bc74dc09677501b5e47f501588bcaaefa8e874b2463dabdb",
+      "deterministicRepeat": true,
+      "artifact": {
+        "kind": "image-2d",
+        "width": 96,
+        "height": 96,
+        "pixelCount": 9216
+      },
+      "validationChecks": 13,
+      "randomize": {
+        "groupId": "everything",
+        "seed": "factory-texture-coral:live-registry-validation:reroll:live-registry-fixed-randomize:596b30f6",
+        "hash": "sha256:aa73b48cd784516bac25a5628923bd82cdf0834bf9666fb18771296e1d339716",
+        "valid": true
+      },
+      "reroll": {
+        "seed": "factory-texture-coral:live-registry-validation:individual:live-registry-fixed-reroll:8982095e",
+        "hash": "sha256:4890068f2c714ebef4bddbdefe32d964f574274506e5ba37742f9de3775ebddb",
+        "valid": true
+      },
+      "phases": null,
+      "export": {
+        "format": "png",
+        "mimeType": "image/png",
+        "fileName": "coral-463dabdb.png",
+        "bytes": 2360312
+      }
+    },
+    {
+      "id": "factory-texture-fish",
+      "displayName": "Fish Generator",
+      "version": "0.1.0",
+      "preview": "image-2d",
+      "sourceModule": "src/domains/factory/texture/kits/fish-kit/index.js",
+      "contentFingerprint": "sha256:91f3b3a6fa426fb8568d9f4964dcadbec4a5ea5e792adf8dac4aadfbc51d857b",
+      "modulesPulled": 11,
+      "moduleFiles": [
+        "src/domains/factory/texture/kits/fish-kit/index.js",
+        "src/domain.js",
+        "src/foundation/hash.js",
+        "src/contracts.js",
+        "src/foundation/geometry.js",
+        "src/foundation/random.js",
+        "src/foundation/raster/surface.js",
+        "src/foundation/raster/png.js",
+        "src/foundation/raster/metrics.js",
+        "src/domains/factory/texture/subject/fish/index.js",
+        "src/foundation/raster/primitives.js"
+      ],
+      "services": [
+        "describe",
+        "generate",
+        "randomize",
+        "reroll",
+        "validate",
+        "export"
+      ],
+      "deterministicHash": "sha256:6e638b5a5f40de323c485c159ba5470e9b0378879595aa855b8ee3cebc6122d1",
+      "deterministicRepeat": true,
+      "artifact": {
+        "kind": "image-2d",
+        "width": 64,
+        "height": 64,
+        "pixelCount": 4096
+      },
+      "validationChecks": 12,
+      "randomize": {
+        "groupId": "everything",
+        "seed": "factory-texture-fish:live-registry-validation:reroll:live-registry-fixed-randomize:5ed65afd",
+        "hash": "sha256:39a58742c67c5ea5b5bc3d6a5e9aa74110f6862e69cb25eb35dee5e4d1e16171",
+        "valid": true
+      },
+      "reroll": {
+        "seed": "factory-texture-fish:live-registry-validation:individual:live-registry-fixed-reroll:9230ad17",
+        "hash": "sha256:32bd0c6dd716cf2fa0333a009fb5f70a580737d24e183bd10ad4f0f0aab99601",
+        "valid": true
+      },
+      "phases": null,
+      "export": {
+        "format": "png",
+        "mimeType": "image/png",
+        "fileName": "fish-bc6122d1.png",
+        "bytes": 1049236
+      }
+    }
+  ]
+}
