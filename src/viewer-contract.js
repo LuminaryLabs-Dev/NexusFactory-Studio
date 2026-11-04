@@ -1,4 +1,4 @@
-export const SUPPORTED_PREVIEW_TYPES = Object.freeze(["mesh-3d", "image-2d"]);
+export const SUPPORTED_PREVIEW_TYPES = Object.freeze(["mesh-3d", "image-2d", "sprite-2d"]);
 
 export function resolvePreviewType(preview) {
   const type = String(preview ?? "none");
@@ -8,7 +8,7 @@ export function resolvePreviewType(preview) {
 export function mimeTypeForFormat(format) {
   switch (String(format ?? "").toLowerCase()) {
     case "glb": return "model/gltf-binary";
-    case "png": return "image/png";
+    case "png": case "atlas": return "image/png";
     case "json": return "application/json";
     default: return "application/octet-stream";
   }
