@@ -6,6 +6,7 @@ import { choiceOptions, isChoiceParameter } from "./control-value.js";
 import { ViewerHost } from "./viewer-host.js";
 import { Mesh3DViewer } from "./viewers/mesh-3d.js";
 import { Image2DViewer } from "./viewers/image-2d.js";
+import { Sprite2DViewer } from "./viewers/sprite-2d.js";
 import { createGenerationGate, generationDelay } from "./generation-policy.js";
 
 const DEFAULT_REGISTRY = "https://cdn.jsdelivr.net/gh/LuminaryLabs-Dev/NexusFactory-Kits@main/registry.json";
@@ -18,7 +19,8 @@ const elementIds = ["search","developer-toggle","library-nav","catalog","viewpor
 const elements = Object.fromEntries(elementIds.map((id) => [id, $(id)]));
 const viewerHost = new ViewerHost(elements.viewport, {
   "mesh-3d": (container) => new Mesh3DViewer(container),
-  "image-2d": (container) => new Image2DViewer(container)
+  "image-2d": (container) => new Image2DViewer(container),
+  "sprite-2d": (container) => new Sprite2DViewer(container)
 });
 
 let currentManifest = null;
